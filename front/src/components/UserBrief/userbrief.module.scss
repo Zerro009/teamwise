@@ -1,0 +1,44 @@
+.userbrief {
+	display: flex;
+	
+	gap: 10px;
+	align-items:center;
+	justify-content:center;
+	width: 270px; 
+	height: 60px;
+
+
+	border: 0;
+	border-radius: 25px;
+
+	background: #282b38;
+}
+.avatar {
+	border: 0;
+	border-radius: 50%;
+	box-sizing:border-box;
+	width: 40px;
+	height: 40px;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.credential {
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+}
+
+.nav {
+	font-size: 12px;
+	font-weight: 500;
+	color:#c6c6c6;
+}
+
+.userbrief:hover {
+	cursor: pointer;
+}

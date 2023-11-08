@@ -1,0 +1,74 @@
+.userbar {
+	position: relative;
+	display: flex;
+	
+	justify-content: center;
+	width: 100px;
+	height: 60px;
+	
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 25px;
+
+	background: #1d1e25;
+
+	.wrapper {
+		display: flex;
+		gap: 20px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.avatar {
+		width: 40px;
+		height: 40px;
+
+		border-radius: 50%;
+	}
+}
+
+.expanded {
+	position: absolute;
+	display: none;
+	top: 80px;
+	right: 0;
+
+	width: 300px;
+	height: 215px;
+
+	background: #1d1e25;
+	border-radius: 25px;
+	
+	.btn {
+		display: grid;
+		grid-template-columns:40px auto;
+		gap: 10px;
+		align-items: center;
+
+		i,span {
+			line-height: 40px;
+		}
+
+		span {
+			text-align: left;
+			font-size: 16px;
+			font-weight: 600;
+		}
+	}
+}
+
+.expanded.active {
+	display: flex;	
+
+}
+.wrapperBtns {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	width: 90%;
+	margin: auto;
+
+}
+
+.userbar:hover {
+	cursor: pointer;
+}
