@@ -23,9 +23,8 @@ export const Header = () => {
 			)
 			.then((response) => {
 				setCode(null);
-				setToken(response.data.token);
-				navigate('/');
-				window.location.reload();
+				searchParams.set('code', null);
+				setToken(response.data);
 			}).catch(error => {
 				console.log(error);
 			});

@@ -7,6 +7,7 @@ import { Button } from '../Button/Button.js';
 import { api, logout } from '../../services/auth-service.js';
 
 import style from './userbar.module.scss';
+import avatar from '../../assets/user.jpg';
 
 export interface iUserbar {
 	active:		bool,
@@ -43,7 +44,7 @@ export const Userbar = (i: iUserbar) => {
 				<div className={style.wrapper}>
 				<img
 					className={style.avatar}
-					src={user.image}
+					src={user.image ? user.image : avatar}
 					alt='avatar'
 				/>
 				{(active) ? <i className='fa fa-angle-up'></i> : <i className='fa fa-angle-down'></i>}

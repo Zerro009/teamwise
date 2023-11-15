@@ -1,4 +1,5 @@
 import { StatCard } from '../../components/StatCard/StatCard.js';
+import { getToken } from '../../services/auth-service.js';
 
 import style from './home.module.scss';
 

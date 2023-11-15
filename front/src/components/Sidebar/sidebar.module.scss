@@ -2,6 +2,8 @@
 	display: flex;
 	flex-direction: column;
 
+	gap: 40px;
+
 	width: 90%;
 
 	max-width: 350px;
@@ -25,4 +27,17 @@
 .body {
 	display: flex;
 	flex-direction: column;
+
+	width: 100%;
+}
+
+.wrapperBtns {
+	display: flex;
+	gap: 20px;
+	justify-content: center;
+}
+.wrapperBriefs {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 }
