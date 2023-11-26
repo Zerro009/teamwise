@@ -1,0 +1,32 @@
+.searchRes {
+    width: 300px;
+    height: auto;
+    max-height: 200px;
+    background-color: plum;
+    overflow: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border: 2px solid whitesmoke;
+    border-radius: 25px;
+
+}
+.searchRes::-webkit-scrollbar{
+    display: none;
+}
+.dataItem {
+    width: 300px;
+    text-decoration: none;
+    background-color: plum;
+    border: 1px solid whitesmoke;
+    min-height: 50px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+}
+.dataItem:hover{
+    background-color: cadetblue;
+}
