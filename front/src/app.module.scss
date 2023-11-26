@@ -1,22 +1,14 @@
 * {
 	margin: 0;
 	padding: 0;
-}
-
-.app {
-	display: grid;
-	grid-template-rows: 80px 1fr auto;
-
-	min-width: 100vw;
-	min-height: 100vh;
-
-	background: #121316;
 
 	font-family: 'Nunito', sans-serif;
 	color: #c6c6c6;
 }
 
-.main {
-	display: grid;
-	grid-template-columns: 15% 65% 20%;
+.app {
+	min-width: 100vw;
+	min-height: 100vh;
+
+	background: #121316;
 }

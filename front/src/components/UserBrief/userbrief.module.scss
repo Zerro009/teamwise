@@ -1,44 +1,28 @@
 .userbrief {
 	display: flex;
-	
-	gap: 10px;
-	align-items:center;
-	justify-content:center;
-	width: 270px; 
+	width: 240px;
 	height: 60px;
-
+	gap: 20px;
 
 	border: 0;
 	border-radius: 25px;
 
 	background: #282b38;
 }
-.avatar {
-	border: 0;
-	border-radius: 50%;
-	box-sizing:border-box;
-	width: 40px;
-	height: 40px;
-}
-
-.wrapper {
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-}
-
-.credential {
-	font-size: 14px;
-	font-weight: bold;
-	color: white;
-}
-
-.nav {
-	font-size: 12px;
-	font-weight: 500;
-	color:#c6c6c6;
-}
 
 .userbrief:hover {
 	cursor: pointer;
+}
+.credentials {
+	font-size: 12px;
+	flex-direction: column;
+	display: flex;
+	justify-content: space-around;
+}
+
+.avatar {
+	border: 1px solid #55f;
+	border-radius: 50%;
+	width: 57px;
+	height: 57px;
 }

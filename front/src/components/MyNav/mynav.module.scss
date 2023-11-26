@@ -1,0 +1,25 @@
+.navm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: red;
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+  border: solid 1px #5555ff;
+  border-radius: 25px;
+  background: none;
+}
+
+.navbtn {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #04d9ff;
+  border-radius: 25px;
+
+
+}
+
+

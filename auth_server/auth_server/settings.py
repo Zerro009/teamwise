@@ -12,20 +12,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6v35(g@k)6hz08btdj^(=n19sx4i#n3jdgcr!ldo)td(3b3!yo'
+SECRET_KEY = os.getenv("AUTH_SERVER_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("AUTH_SERVER_DEBUG") == "True"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.getenv("AUTH_SERVER_ALLOWED_HOST")]
 
 # Application definition
 
@@ -40,27 +41,24 @@ INSTALLED_APPS = [
     # Local
     'users',
     'tokens',
-    'oauth',
 
     # 3rd party
     'rest_framework',
     'corsheaders',
 ]
 
-
 LEADERID_API='https://apps.leader-id.ru/api/v1/'
+CLIENT_ID='15d19274-916e-445b-b145-11f60aa32859'
+CLIENT_SECRET='AE5fKPPpV70QhonomfQvkKSsi9M4r1zQ'
+GRANT_TYPE='authorization_code'
 
 AUTH_USER_MODEL='users.User'
-
 CORS_ALLOW_ALL_ORIGINS=True
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'tokens.authentication.TokenAuthentication',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser',
-    ),
+    )
 }
 
 MIDDLEWARE = [
@@ -100,8 +98,12 @@ WSGI_APPLICATION = 'auth_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':   os.getenv("AUTH_SERVER_DB"),
+        'NAME':     os.getenv("AUTH_SERVER_DB_NAME"),
+        'USER':     os.getenv("AUTH_SERVER_DB_USER"),
+        'PASSWORD': os.getenv("AUTH_SERVER_DB_PASSWORD"),
+        'HOST':     os.getenv("AUTH_SERVER_DB_HOST"),
+        'PORT':     os.getenv("AUTH_SERVER_DB_PORT"),
     }
 }
 

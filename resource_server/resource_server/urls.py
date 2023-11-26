@@ -18,6 +18,5 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('oauth/', include('oauth.urls')),
-    path('headhunter/', include('headhunter.urls')),
+    path('hh/', include('hh.urls')),
 ]

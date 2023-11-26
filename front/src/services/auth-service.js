@@ -1,16 +1,13 @@
 import axios from 'axios';
 
-export const getToken = () => {
-	return JSON.parse(localStorage.getItem('token'));
-};
-
 export const getAccessToken = () => {
-	const token = JSON.parse(localStorage.getItem('token'));
-	return (token) ? token.access_token : undefined;
+	const access_token = JSON.parse(localStorage.getItem('access_token'));
+	return access_token;
 }
 
 export const setToken = (token) => {
-	localStorage.setItem('token', JSON.stringify(token));
+	localStorage.setItem('access_token', JSON.stringify(token.access_token));
+	localStorage.setItem('refresh_token', JSON.stringify(token.refresh_token));
 };
 
 export const api = axios.create({
@@ -21,5 +18,6 @@ export const api = axios.create({
 });
 
 export const logout = () => {
-	localStorage.removeItem('token');
+	localStorage.removeItem('access_token');
+	localStorage.removeItem('refresh_token');
 }

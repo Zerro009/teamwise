@@ -1,37 +1,36 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { api } from 'services/auth-service.js';
 
 import style from './userbrief.module.scss';
-import avatar from '../../assets/user.jpg';
 
 export interface iUserBrief {
-	uid:		number,
-	image:		string,
-	first_name:	string,
-	last_name:	string,
+	user:	Object
 };
 
 export const UserBrief = (i: iUserBrief) => {
-	const navigate = useNavigate();
-
 	return (
 		<div
 			className={style.userbrief}
-			onClick={() => navigate(`/profile/${i.uid}/`)}
 		>
+			{(i.user ? i.user.photo : undefined) &&
 			<img
 				className={style.avatar}
-				src={i.image ? i.image : avatar}
-				alt='avatar'
+				src={i.user.photo.thumbs['180']}
 			/>
-			<div className={style.wrapper}>
-				<span className={style.credential}>
-					{`${i.last_name} ${i.first_name}`}
+			}
+			<div
+				className={style.credentials}
+			>
+				{(i.user) &&
+				<span>
+					{i.user.lastName + ' ' + i.user.firstName}
 				</span>
-				<span className={style.nav}>
-					Перейти в профиль
+				}
+				<span>
+					Роль
 				</span>
 			</div>
-			<i className='fa fa-angle-right'></i>
+			<i className='fa fa-arrow-right'></i>
 		</div>
 	);
 };

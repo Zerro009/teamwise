@@ -5,4 +5,4 @@ from .models import *
 class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model   = Token
-        fields  = '__all__'
+        fields  = ('access_token', 'refresh_token',)

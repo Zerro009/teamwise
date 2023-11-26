@@ -1,67 +1,53 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { IconButton } from '../IconButton/IconButton.js';
-import { Userbar } from '../Userbar/Userbar.js';
-import { Button } from '../Button/Button.js';
-import { getToken, setToken, logout, api } from '../../services/auth-service.js';
+import { Button } from 'components/Button/Button';
+import { api, getAccessToken, setToken, logout } from 'services/auth-service';
+import { MyNavMenu } from 'components/MyNavMenu/MyNavMenu';
+import { MyNav } from 'components/MyNav/MyNav';
 
 import style from './header.module.scss';
-import logo from '../../assets/logo.svg';
 
 export const Header = () => {
 	const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [code, setCode] = useState(searchParams.get('code'));
-	const [loading, setLoading] = useState(false);
+	 
 
 	useEffect(() => {
 		if (code) {
 			api.post(`tokens/obtain/`,
 				{
-					'code': code
+					code: code
 				}
 			)
 			.then((response) => {
+				console.log(response.data);
 				setCode(null);
-				searchParams.set('code', null);
 				setToken(response.data);
+				navigate('/');
 			}).catch(error => {
 				console.log(error);
 			});
 		}
-	});
+	}, [code]);
 
-	const onLogin = (e) => {
-		e.preventDefault();
+	const onLogin = () => {
 		window.location.replace(process.env.REACT_APP_LEADERID_AUTH);
-	};
+	}
 
 	return (
-		<div className={style.header}>
-			<img
-				className={style.logo}
-				src={logo}
-			/>
-			<div className={style.wrapper}>
-				<div className={style.wrapperBtns}>
-					<IconButton
-						icon='fa fa-message'
-					/>
-					<IconButton
-						icon='fa fa-bell'
-					/>
-				</div>
-				{(getToken()) ? (
-					<Userbar />
-				) : (
-					<Button
-						width='80px'
-						height='40px'
-						children='Вход'
-						onClick={onLogin}
-					/>
-				)}
+		<div className={style.header}> 
+			<div className={style.leftheader}>
+				<button className={style.logo}> X </button>
 			</div>
+			{(getAccessToken()) ? (
+				<MyNav />
+			) : (
+			<Button
+				children='LOGIN'
+				onClick={() => onLogin()}
+			/>
+			)}
 		</div>
 	);
 };

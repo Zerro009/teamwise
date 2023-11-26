@@ -1,4 +1,4 @@
-#!/home/noname/projects/social-network/.venv/bin/python
+#!/home/noname/projects/teamwise/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

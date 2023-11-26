@@ -2,42 +2,66 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
-from tokens.models import *
-
-from .serializers import *
-from .models import *
-from .authentication import *
+from django.conf import settings
 
 import requests
 
+from users.serializers import *
+from users.models import *
+
+from .authentication import *
+from .serializers import *
+from .models import *
+
 class TokenObtain(APIView):
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
+    def post(self, request):
+        '''
+            1. Front redirects to leader-id authentication page
+            2. Authorization code is sent back to front
+            3. Front sends authorization code to this endpoint
+            4. Code is transfered for leader-id token
+            5. Token is return back to front
+        '''
         code = request.data.get('code', None)
-        if code:
-            # Structure described in Leader-id API Swagger
-            data = {
-                'client_id':        '15d19274-916e-445b-b145-11f60aa32859',
-                'client_secret':    'AE5fKPPpV70QhonomfQvkKSsi9M4r1zQ',
-                'grant_type':       'authorization_code',
-                'code':             code
-            }
-            url = settings.LEADERID_API + 'oauth/token'
-            # Requesting token with obtained code
-            r = requests.post(url, json=data)
+        if not code:
+            return Response(status=401)
+        # Format from https://apps.leader-id.ru/swagger/
+        data = {
+            'client_id':        settings.CLIENT_ID,
+            'client_secret':    settings.CLIENT_SECRET,
+            'grant_type':       settings.GRANT_TYPE,
+            'code':             code,
+        }
+        url = '%soauth/token' % settings.LEADERID_API
+        r = requests.post(url, json=data)
+        if r.status_code != 200:
+            return Response(r.json(), r.status_code)
+        '''
+            Response data from leader-id
+            contains:
+                user_id
+                access_token
+                refresh_token
+                user_validated
+        '''
+        response = r.json()
+        user, created = User.objects.get_or_create(user_id=response['user_id'])
+        token, created = Token.objects.get_or_create(
+            user=user,
+        )
+        token.access_token = response['access_token']
+        token.refresh_token = response['refresh_token']
+        token.save()
+        serializer = TokenSerializer(token)
+        return Response(serializer.data, 200)
 
-            if r.status_code != 200:
-                # Returning bad response from leader-id
-                return Response(r.json(), status=r.status_code)
-            data = r.json()
-            user, created  = User.objects.get_or_create(uid=data['user_id'])
-            token = Token.objects.create(
-                user=user,
-                access_token=data['access_token'],
-                refresh_token=data['refresh_token']
-            )
-            serializer = TokenSerializer(token)
-            return Response(serializer.data, 200)
-        return Response(status=400)
+class TokenIntrospect(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
