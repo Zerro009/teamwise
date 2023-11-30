@@ -18,24 +18,6 @@ ROLE_CHOICES=[
     ('O',   'Other'),
 ]
 
-class TeamManager(models.Manager):
-    def invite(self, team, to_user, role):
-        if TeamMember.objects.filter(team=team, user=to_user).exists():
-            raise AlreadyExistsError('This user is already this team\'s member')
-        if TeamInvite.objects.filter(team=team, to_user=to_user).exists():
-            raise AlreadyExistsError('This user was already invited to this team')
-        if team.user == to_user:
-            raise Exception('This user is team\'s owner')
-        invite = TeamInvite.objects.create(team=team, to_user=to_user)
-        return invite
-
-    def kick(self, team, user):
-        if not TeamMember.objects.filter(team=team, user=user).exists():
-            raise Exception('This user\'s not this team\'s member')
-        member = TeamMember.objects.get(team=team, user=user)
-        member.delete()
-        return member
-
 class News(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField()
@@ -50,21 +32,13 @@ class Resume(models.Model):
     user = models.IntegerField()
     name = models.CharField(max_length=255, blank=False, null=False)
     role = models.CharField(max_length=255, choices=ROLE_CHOICES)
+    experience = models.TextField()
+    github = models.CharField(max_length=255, blank=True, null=True,)
 
-class Team(models.Model):
-    '''
-    Union of some users made to create projects cooperatively
-    '''
-    user = models.IntegerField()
-    name = models.CharField(max_length=255, blank=False, null=False)
-    description = models.TextField()
+class Experience(models.Model):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='related_experience',)
+    name = models.CharField(max_length=255,)
+    from_date = models.DateField()
+    to_date = models.DateField()
 
-class TeamInvite(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    to_user = models.IntegerField()
-    role = models.CharField(max_length=255, choices=ROLE_CHOICES)
 
-class TeamMember(models.Model):
-    user = models.IntegerField()
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    role = models.CharField(max_length=255, choices=ROLE_CHOICES)

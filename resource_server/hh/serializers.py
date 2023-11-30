@@ -7,12 +7,14 @@ class NewsSerializer(serializers.ModelSerializer):
         model   = News
         fields  = '__all__'
 
-class ResumeSerializer(serializers.ModelSerializer):
+class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
-        model   = Resume
+        model   = Experience
         fields  = '__all__'
 
-class TeamSerializer(serializers.ModelSerializer):
+class ResumeSerializer(serializers.ModelSerializer):
+    related_experience = ExperienceSerializer(many=True,)
+
     class Meta:
-        model   = Team
+        model   = Resume
         fields  = '__all__'
