@@ -1,8 +1,10 @@
 from rest_framework import authentication
 
-from users.models import *
+from .models import *
+from resumes.models import *
 
 import requests
+import os
 
 class TokenAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
@@ -10,7 +12,7 @@ class TokenAuthentication(authentication.BaseAuthentication):
         if not token:
             return None
         token = token.split()[1].replace('""', '')
-        url = 'http://localhost:8001/tokens/introspect/'
+        url = 'http://%s:%s/tokens/introspect/' % (os.getenv('AUTH_SERVER_HOST'), os.getenv('AUTH_SERVER_PORT'))
         headers = {
             'Authorization':    request.headers['Authorization']
         }
@@ -19,5 +21,8 @@ class TokenAuthentication(authentication.BaseAuthentication):
         if (r.status_code != 200):
             return None
 
-        user = User(**r.json())
+        user, created = User.objects.get_or_create(**r.json())
+        if created:
+            Role.objects.init_roles(user)
+
         return (user, token)        

@@ -1,9 +1,9 @@
 import { PropsWithChildren } from 'react';
 
 export interface ButtonProps {
-	onClick:	() => void,
-	width:		number,
-	height:		number,
+	onClick:	any,
+	width:		string,
+	height:		string,
 	disabled:	boolean,
 };
 

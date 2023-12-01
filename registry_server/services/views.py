@@ -22,11 +22,13 @@ class ServiceList(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, 201)
+            print(serializer.errors)
             return Response(serializer.errors, 400)
         else:
             serializer = ServiceSerializer(instance=service, data=request.data)
             if serializer.is_valid():
                 return Response(serializer.data, 200)
+            print(serializer.errors)
             return Response(serializer.errors, 400)
 
 class ServiceDetail(APIView):

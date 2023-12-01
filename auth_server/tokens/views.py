@@ -27,6 +27,7 @@ class TokenObtain(APIView):
         code = request.data.get('code', None)
         if not code:
             return Response(status=401)
+        print(code)
         # Format from https://apps.leader-id.ru/swagger/
         data = {
             'client_id':        settings.CLIENT_ID,

@@ -9,14 +9,12 @@ import json
 class ProxyPass(APIView):
     def get(self, request):
         path = request.path
-        print(path)
         url = 'http://%s:%s%s' % (os.getenv('REGISTRY_SERVER_HOST'), os.getenv('REGISTRY_SERVER_PORT'), path)
         r = requests.get(url)
         if r.status_code != 200:
             return Response(status=r.status_code)
         service = r.json()
-        print(service)
-        url = 'http://%s:%s%s' % (service['ipv4'], service['port'], path)
+        url = 'http://%s:%s%s' % (service['ipv4'], service['port'], path,)
         headers = {
             'Content-Type':     'application/json',
             'Authorization':    request.headers.get('Authorization', '')

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)&$4wcy-nzycujruu_#uymo_s8)1*ww8m8n%n^6lb=p&vf&^@o'
+SECRET_KEY = os.getenv('RESOURCE_SERVER_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('RESOURCE_SERVER_DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.getenv('RESOURCE_SERVER_ALLOWED_HOST')]
 
 # Application definition
 
@@ -39,7 +41,9 @@ INSTALLED_APPS = [
 
     # Local
     'users',
-    'hh',
+    'resumes',
+    'teams',
+    'projects',
 
     # 3rd party
     'rest_framework',
@@ -94,8 +98,12 @@ WSGI_APPLICATION = 'resource_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':   os.getenv('RESOURCE_SERVER_DB'),
+        'NAME':     os.getenv('RESOURCE_SERVER_DB_NAME'),
+        'USER':     os.getenv('RESOURCE_SERVER_DB_USER'),
+        'PASSWORD': os.getenv('RESOURCE_SERVER_DB_PASSWORD'),
+        'HOST':     os.getenv('RESOURCE_SERVER_DB_HOST'),
+        'PORT':     os.getenv('RESOURCE_SERVER_DB_PORT'),
     }
 }
 

@@ -1,0 +1,2 @@
+1. Gitea - free GitLab alternative - check license and check API
+2. Check free Jira alternatives and APIs

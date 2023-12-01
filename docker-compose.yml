@@ -33,6 +33,17 @@ services:
       networks:
         backend:
           ipv4_address: 172.16.0.130
+    resource_server_db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=resource_server_db
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+      ports:
+        - "5432:5432"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.131
     api_gateway:
       build: ./api_gateway
       command: python manage.py runserver 0.0.0.0:8001
@@ -115,6 +126,41 @@ services:
         backend:
           ipv4_address: 172.16.0.12
         default:
+    resource_server:
+      build: ./resource_server
+      command: python manage.py runserver 172.16.0.13:34000
+      environment:
+        - RESOURCE_SERVER_SECRET_KEY="django-insecure-)&$4wcy-nzycujruu_#uymo_s8)1*ww8m8n%n^6lb=p&vf&^@o"
+        - RESOURCE_SERVER_DEBUG=True
+        - RESOURCE_SERVER_ALLOWED_HOST=*
+
+        - AUTH_SERVER_HOST=172.16.0.12
+        - AUTH_SERVER_PORT=34000
+
+        - REGISTRY_SERVER_HOST=172.16.0.11
+        - REGISTRY_SERVER_PORT=34000
+
+        - RESOURCE_SERVER_PORT=34000
+        - RESOURCE_SERVER_DB=django.db.backends.postgresql
+        - RESOURCE_SERVER_DB_NAME=resource_server_db
+        - RESOURCE_SERVER_DB_USER=user
+        - RESOURCE_SERVER_DB_PASSWORD=password
+        - RESOURCE_SERVER_DB_HOST=172.16.0.131
+        - RESOURCE_SERVER_DB_PORT=5432
+      depends_on:
+        - registry_server
+        - resource_server_db
+      deploy:
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 10
+          window: 5s
+      ports:
+        - "34000:34000"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.13
 networks:
   backend:
     driver: bridge
