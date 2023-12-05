@@ -1,0 +1,41 @@
+.projectView {
+    width: 750px;
+    height: 360px;
+    border: 1px solid white;
+    border-radius: 25px;
+    /*background-image: url("/img/b.svg");*/
+}
+
+.projectView__title {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    height: 60px;
+
+    color: #000;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: bold;
+    
+}
+
+.projectView__properties {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    margin-left: 25px;
+    gap: 8px;
+} 
+
+.projectView__pr {
+    min-height: 50px;
+    color: #000;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -1,0 +1,35 @@
+.blockContent {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+
+    width: 250px;
+    height: 200px;
+
+    border-radius: 25px;
+    border: 1px solid #FFF;
+    background: #FFF;
+    box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.25);
+}
+
+.blockContent__count {
+    color: #000;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.blockContent__text {
+    color: #000;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

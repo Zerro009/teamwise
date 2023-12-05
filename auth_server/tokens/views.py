@@ -56,6 +56,8 @@ class TokenObtain(APIView):
         token.refresh_token = response['refresh_token']
         token.save()
         serializer = TokenSerializer(token)
+        if created or not user.username:
+            return Response(serializer.data, 201)
         return Response(serializer.data, 200)
 
 class TokenIntrospect(APIView):

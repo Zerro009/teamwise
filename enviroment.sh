@@ -1,43 +1,171 @@
-#!/usr/bin/env	bash
+version: '3'
+services:
+    api_gateway_db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=api_gateway_db
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+      ports:
+        - "5432:5432"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.128
+    registry_server_db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=registry_server_db
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+      ports:
+        - "5432:5432"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.129
+    auth_server_db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=auth_server_db
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+      ports:
+        - "5432:5432"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.130
+    resource_server_db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=resource_server_db
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+      ports:
+        - "5432:5432"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.131
+    api_gateway:
+      build: ./api_gateway
+      command: python manage.py runserver 0.0.0.0:8001
+      environment:
+        - API_GATEWAY_SECRET_KEY="django-insecure-#untv91_p)njfg7p(xgpmv1$9=u2y!)%r9-$p88-u-v5nuc56g"
+        - API_GATEWAY_DEBUG=True
+        - API_GATEWAY_ALLOWED_HOST=172.16.0.10
 
-# ___---___---___---___---___---___
-export API_GATEWAY_SECRET_KEY="django-insecure-#untv91_p)njfg7p(xgpmv1$9=u2y!)%r9-$p88-u-v5nuc56g"
-export API_GATEWAY_DEBUG="True"
-export API_GATEWAY_ALLOWED_HOST="*"
-export API_GATEWAY_HOST="0.0.0.0"
-export API_GATEWAY_PORT="8001"
+        - REGISTRY_SERVER_HOST=172.16.0.11
+        - REGISTRY_SERVER_PORT=34000
 
-export API_GATEWAY_DB="django.db.backends.sqlite3"
-export API_GATEWAY_DB_NAME="api_gateway_db"
-export API_GATEWAY_DB_USER="api_gateway_db_user"
-export API_GATEWAY_DB_PASSWORD="api_gateway_db_password"
-export API_GATEWAY_DB_HOST="localhost"
-export API_GATEWAY_DB_PORT="5432"
+        - API_GATEWAY_DB=django.db.backends.postgresql
+        - API_GATEWAY_DB_NAME=api_gateway_db
+        - API_GATEWAY_DB_USER=user
+        - API_GATEWAY_DB_PASSWORD=password
+        - API_GATEWAY_DB_HOST=172.16.0.128
+        - API_GATEWAY_DB_PORT=5432
+      depends_on:
+        - api_gateway_db
+      ports:
+        - "8001:8001"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.10
+        default:
+    registry_server:
+      build: ./registry_server
+      command: python manage.py runserver 172.16.0.11:34000
+      environment:
+        - REGISTRY_SERVER_SECRET_KEY="django-insecure-8p@ra-ic3q-3$_%0iy&f4%0==mtjz4u97t%*s=js^kb^u3vf8@"
+        - REGISTRY_SERVER_DEBUG=True
+        - REGISTRY_SERVER_ALLOWED_HOST=172.16.0.11
 
-# ___---___---___---___---___---___
-export REGISTRY_SERVER_SECRET_KEY="django-insecure-8p@ra-ic3q-3$_%0iy&f4%0==mtjz4u97t%*s=js^kb^u3vf8@"
-export REGISTRY_SERVER_DEBUG="True"
-export REGISTRY_SERVER_ALLOWED_HOST="*"
-export REGISTRY_SERVER_HOST="localhost"
-export REGISTRY_SERVER_PORT="8002"
+        - REGISTRY_SERVER_HOST=172.16.0.11
+        - REGISTRY_SERVER_PORT=34000
 
-export REGISTRY_SERVER_DB="django.db.backends.sqlite3"
-export REGISTRY_SERVER_DB_NAME="registry_server_db"
-export REGISTRY_SERVER_DB_USER="registry_server_db_user"
-export REGISTRY_SERVER_DB_PASSWORD="registry_server_db_password"
-export REGISTRY_SERVER_DB_HOST="localhost"
-export REGISTRY_SERVER_DB_PORT="5432"
+        - REGISTRY_SERVER_DB=django.db.backends.postgresql
+        - REGISTRY_SERVER_DB_NAME=registry_server_db
+        - REGISTRY_SERVER_DB_USER=user
+        - REGISTRY_SERVER_DB_PASSWORD=password
+        - REGISTRY_SERVER_DB_HOST=172.16.0.129
+        - REGISTRY_SERVER_DB_PORT=5432
+      depends_on:
+        - registry_server_db
+      ports:
+        - "34000:34000"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.11
+    auth_server:
+      build: ./auth_server
+      command: python manage.py runserver 0.0.0.0:34000
+      environment:
+        - AUTH_SERVER_SECRET_KEY="django-insecure-8p@ra-ic3q-3$_%0iy&f4%0==mtjz4u97t%*s=js^kb^u3vf8@"
+        - AUTH_SERVER_DEBUG=True
+        - AUTH_SERVER_ALLOWED_HOST=*
 
-# ___---___---___---___---___---___
-export AUTH_SERVER_SECRET_KEY="django-insecure-)pqvt^+r86(_fcx1*v8yl&l_@^i9mk4wgjqa0akcrt@36#wah_"
-export AUTH_SERVER_DEBUG="True"
-export AUTH_SERVER_ALLOWED_HOST="*"
-export AUTH_SERVER_HOST="localhost"
-export AUTH_SERVER_PORT="8003"
+        - REGISTRY_SERVER_HOST=172.16.0.11
+        - REGISTRY_SERVER_PORT=34000
 
-export AUTH_SERVER_DB="django.db.backends.sqlite3"
-export AUTH_SERVER_DB_NAME="auth_server_db"
-export AUTH_SERVER_DB_USER="auth_server_db_user"
-export AUTH_SERVER_DB_PASSWORD="auth_server_db_password"
-export AUTH_SERVER_DB_HOST="localhost"
-export AUTH_SERVER_DB_PORT="5432"
+        - AUTH_SERVER_PORT=34000
+        - AUTH_SERVER_DB=django.db.backends.postgresql
+        - AUTH_SERVER_DB_NAME=auth_server_db
+        - AUTH_SERVER_DB_USER=user
+        - AUTH_SERVER_DB_PASSWORD=password
+        - AUTH_SERVER_DB_HOST=172.16.0.130
+        - AUTH_SERVER_DB_PORT=5432
+      depends_on:
+        - registry_server
+        - auth_server_db
+      deploy:
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 10
+          window: 5s
+      ports:
+        - "34000:34000"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.12
+        default:
+    resource_server:
+      build: ./resource_server
+      command: python manage.py runserver 172.16.0.13:34000
+      environment:
+        - RESOURCE_SERVER_SECRET_KEY="django-insecure-)&$4wcy-nzycujruu_#uymo_s8)1*ww8m8n%n^6lb=p&vf&^@o"
+        - RESOURCE_SERVER_DEBUG=True
+        - RESOURCE_SERVER_ALLOWED_HOST=*
+
+        - AUTH_SERVER_HOST=172.16.0.12
+        - AUTH_SERVER_PORT=34000
+
+        - REGISTRY_SERVER_HOST=172.16.0.11
+        - REGISTRY_SERVER_PORT=34000
+
+        - RESOURCE_SERVER_PORT=34000
+        - RESOURCE_SERVER_DB=django.db.backends.postgresql
+        - RESOURCE_SERVER_DB_NAME=resource_server_db
+        - RESOURCE_SERVER_DB_USER=user
+        - RESOURCE_SERVER_DB_PASSWORD=password
+        - RESOURCE_SERVER_DB_HOST=172.16.0.131
+        - RESOURCE_SERVER_DB_PORT=5432
+      depends_on:
+        - registry_server
+        - resource_server_db
+      deploy:
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 10
+          window: 5s
+      ports:
+        - "34000:34000"
+      networks:
+        backend:
+          ipv4_address: 172.16.0.13
+networks:
+  backend:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24

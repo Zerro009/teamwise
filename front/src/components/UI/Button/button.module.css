@@ -1,0 +1,54 @@
+.loginBtn {
+    padding: 5px 15px;
+    color: black;
+    font-size: 14px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.navigationBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 14px;
+
+    width: 100%;
+    min-height: 50px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+
+}
+
+.navigationBtn__picture {
+    max-height: 40px;
+
+}
+
+.navigationBtn__text {
+    color: #000;
+    font-family: Helvetica;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.headerBtn{
+    width: 60px;
+    height: 60px;
+    background: transparent;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border: none;
+    cursor: pointer;
+}
+
+
+.userbarBtn {
+    display: flex;
+    gap: 10px;
+    font-size: 16px;
+}

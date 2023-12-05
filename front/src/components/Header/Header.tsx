@@ -1,66 +1,47 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from 'components/Button/Button';
-import { api, getAccessToken, setToken, logout } from 'services/auth-service';
+import style from './header.module.css'
+import GM from 'assets/GM.svg';
+import { Button, ButtonVariant } from 'components/UI/Button/Button';
+
+import { FaRegMessage } from "react-icons/fa6";
+import { RiNotification2Line } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
-	const navigate = useNavigate();
+	const navigate = useNavigate()
 
-	const [searchParams, setSearchParams] = useSearchParams();
-	const [code, setCode] = useState(searchParams.get('code'));
-	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		if (code) {
-			api.post(`tokens/obtain/`,
-			{
-				'code':	code
-			}
-		)
-		.then((response) => {
-			setCode(null);
-			setToken(response.data);
-			navigate('/');
-			window.location.reload();
-		}).catch(error => {
-			console.log(error);
-		}, []);
-
-	}
-}, []);
-
-	const onLogout = (e) => {
-		e.preventDefault();
-		logout();
-		window.location.reload();
-	}
-
-	const onLogin = (e) => {
-		e.preventDefault()
-		setLoading(true)
-		window.location.replace(process.env.REACT_APP_LEADERID_AUTH)
-	}
 
 	return (
-		<div> 
-			{(getAccessToken()) ? (
-			<Button
-				width="fit-content"
-				height="fit-content"
-				disabled={loading}
-				onClick={onLogout}
-				children="Logout"
-			/>
-			) : (
-			<Button
-				width="fit-content"
-				height="fit-content"
-				disabled={loading}
-				onClick={onLogin}
-			>
-				Sign In
-			</Button>
-			)}
+		<div className={style.header}>
+				<Button
+					onClick={() => navigate('/main')}
+					disabled={false}
+					variant={ButtonVariant.header}
+				>
+					<img src={GM} />
+				</Button>
+				<div className={style.rightHeader}>
+					<div className={style.leftRightHeader}>
+						<Button 
+							onClick={() => navigate('/messenger')} 
+							disabled={false}
+							variant={ButtonVariant.header}
+						>
+							<FaRegMessage className={style.icon}/>
+						</Button>
+						<Button 
+							onClick={() => navigate('/notifications')}
+							disabled={false}
+							variant={ButtonVariant.header}
+						>
+							<RiNotification2Line className={style.icon}/>
+						</Button>
+					</div>
+					<div>
+						hhhhh
+					</div>
+				</div>
 		</div>
-	);
-};
+	)
+}
+
+
